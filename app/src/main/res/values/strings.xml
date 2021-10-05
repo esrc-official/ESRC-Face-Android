@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">ESRC Face</string>
+
+    <!-- Main Activity -->
+    <string name="main_facebox_text">
+        Please look ahead without movement
+    </string>
+
+    <string name="main_facebox_image_desc">
+        FaceBoxImage
+    </string>
+
+    <string name="main_facial_expression_title_text">
+        Facial Exp.
+    </string>
+
+    <string name="main_facial_expression_image_desc">
+        Facial Exp.
+    </string>
+
+    <string name="facial_expression_val_text">
+
+    </string>
+
+    <string name="main_head_pose_title_text">
+        Head Pose
+    </string>
+
+    <string name="main_head_pose_unit_text">
+        angle
+    </string>
+
+    <string name="main_attention_title_text">
+        Attention
+    </string>
+
+</resources>
