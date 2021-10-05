@@ -8,7 +8,7 @@
 
 ## Introduction
 
-[ESRC](http://esrc.co.kr) provides the vision API and SDK for your mobile app, enabling real-time recognizing facial action unit and facial expression using a camera.
+[ESRC](http://esrc.co.kr) provides the vision API and SDK for your mobile app, enabling real-time analyzing facial action unit and recognizing facial expression using a camera.
 
 <br />
 
