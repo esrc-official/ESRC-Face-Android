@@ -113,7 +113,7 @@ ESRC.start(
                 // Handle error.
             }
             
-        // The face is detected.
+            // The face is detected.
             // Through the “face” parameter of the onDetectedFace() callback method,
             // you can get the location of the face from the result object
             // that ESRC Face SDK has passed to the onDetectedFace().
