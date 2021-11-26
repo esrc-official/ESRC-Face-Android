@@ -145,6 +145,8 @@ When your app is not use the camera or destroyed, stop the ESRC Face SDK.
 ESRC.stop();
 ```
 
+<br />
+
 ## Android sample
 
 You can **clone** the project from the [Sample repository](https://github.com/esrc-official/ESRC-Face-Android).
