@@ -17,8 +17,8 @@ android {
         applicationId "com.esrc.face.android"
         minSdkVersion 17
         targetSdkVersion 30
-        versionCode 244
-        versionName "2.4.4"
+        versionCode 2441
+        versionName "2.4.4.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
