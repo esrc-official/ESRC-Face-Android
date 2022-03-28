@@ -19,11 +19,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.esrc.sdk.android.ESRC;
-import com.esrc.sdk.android.ESRCException;
-import com.esrc.sdk.android.ESRCFragment;
-import com.esrc.sdk.android.ESRCLicense;
-import com.esrc.sdk.android.ESRCType;
+import com.esrc.face.sdk.android.ESRC;
+import com.esrc.face.sdk.android.ESRCException;
+import com.esrc.face.sdk.android.ESRCFragment;
+import com.esrc.face.sdk.android.ESRCLicense;
+import com.esrc.face.sdk.android.ESRCType;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.INTERNET;
@@ -45,22 +45,25 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             true,  // Whether detect face or not.
             true,  // Whether detect facial landmark or not. If enableFace is false, it is also automatically set to false.
             true,  // Whether analyze facial action unit or not. If enableFace or enableFacialLandmark is false, it is also automatically set to false.
-            true);  // Whether recognize facial expression or not. If enableFace is false, it is also automatically set to false.
+            true,  // Whether recognize basic facial expression or not. If enableFace is false, it is also automatically set to false.
+            true);  // Whether recognize valence facial expression or not. If enableFace is false, it is also automatically set to false.
 
     // Layout variables for FaceBox
     private TextView mFaceBoxText;
     private ImageView mFaceBoxImage;
     private GradientDrawable mFaceBoxDrawable;
 
-    // Layout variables for Facial Expression
-    private int[] mFacialExpImageDrawables;
-    private View mFacialExpValContainer;
-    private ImageView mFacialExpImage;
-    private TextView mFacialExpValText;
+    // Layout variables for Basic Facial Expression
+    private int[] mBasicFacialExpImageDrawables;
+    private View mBasicFacialExpValContainer;
+    private ImageView mBasicFacialExpImage;
+    private TextView mBasicFacialExpValText;
 
-    // Layout variables for Head Pose
-    private View mHeadPoseValContainer;
-    private TextView mHeadPoseValText;
+    // Layout variables for Valence Facial Expression
+    private int[] mValenceFacialExpImageDrawables;
+    private View mValenceFacialExpValContainer;
+    private ImageView mValenceFacialExpImage;
+    private TextView mValenceFacialExpValText;
 
     // Layout variables for Attention
     private View mAttentionValContainer;
@@ -148,19 +151,23 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         mFaceBoxImage = findViewById(R.id.facebox_image);
         mFaceBoxDrawable = (GradientDrawable) mFaceBoxImage.getBackground();
 
-        // Initialize layout for Facial Expression
-        mFacialExpImageDrawables = new int[] {
+        // Initialize layout for Basic Facial Expression
+        mBasicFacialExpImageDrawables = new int[] {
                 R.drawable.ic_facial_exp_anger, R.drawable.ic_facial_exp_disgust, R.drawable.ic_facial_exp_fear,
                 R.drawable.ic_facial_exp_happy, R.drawable.ic_facial_exp_sad, R.drawable.ic_facial_exp_surprise,
-                R.drawable.ic_facial_exp_neutral
+                R.drawable.ic_facial_exp_neutral,
         };
-        mFacialExpValContainer = findViewById(R.id.facial_expression_val_container);
-        mFacialExpImage = findViewById(R.id.facial_expression_image);
-        mFacialExpValText = findViewById(R.id.facial_expression_val_text);
+        mBasicFacialExpValContainer = findViewById(R.id.basic_facial_expression_val_container);
+        mBasicFacialExpImage = findViewById(R.id.basic_facial_expression_image);
+        mBasicFacialExpValText = findViewById(R.id.basic_facial_expression_val_text);
 
-        // Initialize layout for Head Pose
-        mHeadPoseValContainer = findViewById(R.id.head_pose_val_container);
-        mHeadPoseValText = findViewById(R.id.head_pose_val_text);
+        // Initialize layout for Valence Facial Expression
+        mValenceFacialExpImageDrawables = new int[] {
+                R.drawable.ic_facial_exp_positive, R.drawable.ic_facial_exp_negative, R.drawable.ic_facial_exp_neutral,
+        };
+        mValenceFacialExpValContainer = findViewById(R.id.valence_facial_expression_val_container);
+        mValenceFacialExpImage = findViewById(R.id.valence_facial_expression_image);
+        mValenceFacialExpValText = findViewById(R.id.valence_facial_expression_val_text);
 
         // Initialize layout for Attention
         mAttentionValContainer = findViewById(R.id.attention_val_container);
@@ -192,8 +199,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                     mFaceBoxText.setTextColor(color);
                     mFaceBoxDrawable.setStroke(8, color);
 
-                    // Show Head Pose and Attention containers (debug)
-                    mHeadPoseValContainer.setVisibility(View.VISIBLE);
+                    // Show Attention containers
                     mAttentionValContainer.setVisibility(View.VISIBLE);
                 } else {
                     e.printStackTrace();
@@ -211,13 +217,12 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                     mFaceBoxDrawable.setStroke(4, color);
 
                     // Hide containers
-                    mFacialExpValContainer.setVisibility(View.GONE);
-                    mHeadPoseValContainer.setVisibility(View.GONE);
+                    mBasicFacialExpValContainer.setVisibility(View.GONE);
+                    mValenceFacialExpValContainer.setVisibility(View.GONE);
                     mAttentionValContainer.setVisibility(View.GONE);
                 } else {
                     e.printStackTrace();
                 }
-
             }
 
             @Override
@@ -239,22 +244,32 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             }
 
             @Override
-            public void onRecognizedFacialExpression(ESRCType.FacialExpression facialExpression, ESRCException e) {
+            public void onRecognizedBasicFacialExpression(ESRCType.BasicFacialExpression basicFacialExpression, ESRCException e) {
                 if (e == null) {
-                    Log.d(TAG, "onRecognizedFacialExpression: " + facialExpression.toString());
+                    Log.d(TAG, "onRecognizedBasicFacialExpression: " + basicFacialExpression.toString());
 
-                    if (e == null) {
-                        Log.d(TAG, "onRecognizedFacialExpression: " + facialExpression.toString());
+                    // Set Basic Facial Expression values
+                    mBasicFacialExpImage.setImageResource(mBasicFacialExpImageDrawables[basicFacialExpression.getEmotion()]);
+                    mBasicFacialExpValText.setText(basicFacialExpression.getEmotionStr());
 
-                        // Set Facial Expression values
-                        mFacialExpImage.setImageResource(mFacialExpImageDrawables[facialExpression.getEmotion()]);
-                        mFacialExpValText.setText(facialExpression.getEmotionStr());
+                    // Show container for Basic Facial Expression
+                    mBasicFacialExpValContainer.setVisibility(View.VISIBLE);
+                } else {
+                    e.printStackTrace();
+                }
+            }
 
-                        // Show container for Facial Expression
-                        mFacialExpValContainer.setVisibility(View.VISIBLE);
-                    } else {
-                        e.printStackTrace();
-                    }
+            @Override
+            public void onRecognizedValenceFacialExpression(ESRCType.ValenceFacialExpression valenceFacialExpression, ESRCException e) {
+                if (e == null) {
+                    Log.d(TAG, "onRecognizedValenceFacialExpression: " + valenceFacialExpression.toString());
+
+                    // Set Valence Facial Expression values
+                    mValenceFacialExpImage.setImageResource(mValenceFacialExpImageDrawables[valenceFacialExpression.getEmotion()]);
+                    mValenceFacialExpValText.setText(valenceFacialExpression.getEmotionStr());
+
+                    // Show container for Valence Facial Expression
+                    mValenceFacialExpValContainer.setVisibility(View.VISIBLE);
                 } else {
                     e.printStackTrace();
                 }
@@ -264,15 +279,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             public void onEstimatedHeadPose(ESRCType.HeadPose headPose, ESRCException e) {
                 if (e == null) {
                     Log.d(TAG, "onEstimatedHeadPose: " + headPose.toString());
-
-                    // Set Head Pose values
-                    mHeadPoseValText.setText(
-                            Long.toString(Math.round(headPose.getThetaX())) + ", " +
-                                    Long.toString(Math.round(headPose.getThetaY())) + ", " +
-                                    Long.toString(Math.round(headPose.getThetaZ())));
-
-                    // Show container for Head Pose
-                    mHeadPoseValContainer.setVisibility(View.VISIBLE);
                 } else {
                     e.printStackTrace();
                 }
