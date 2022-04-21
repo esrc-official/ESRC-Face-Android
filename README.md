@@ -14,7 +14,7 @@
 
 ## Installation
 
-To use our Android samples, you should first install [ESRC Face SDK for Android](https://github.com/esrc-official/ESRC-Face-SDK-Android) 2.4.5 or higher on your system and should be received License Key by requesting by our email: **esrc@esrc.co.kr** <br /> 
+To use our Android samples, you should first install [ESRC Face SDK for Android](https://github.com/esrc-official/ESRC-Face-SDK-Android) 2.4.6 or higher on your system and should be received License Key by requesting by our email: **esrc@esrc.co.kr** <br /> 
 
 <br />
 
@@ -105,7 +105,8 @@ ESRC.start(
         true,  // Whether detect face or not.
         true,  // Whether detect facial landmark or not. If enableFace is false, it is also automatically set to false.
         true,  // Whether analyze facial action unit or not. If enableFace or enableFacialLandmark is false, it is also automatically set to false.
-        true),  // Whether recognize facial expression or not. If enableFace is false, it is also automatically set to false.
+        true,  // Whether recognize basic facial expression or not. If enableFace is false, it is also automatically set to false.
+        true),  // Whether recognize valence facial expression or not. If enableFace is false, it is also automatically set to false.
     new ESRC.ESRCHandler() {
         @Override
         public void onDetectedFace(ESRCTYPE.Face face, ESRCException e) {
@@ -121,11 +122,11 @@ ESRC.start(
         }
         
         // Please implement other callback method of ESRC.ESRCHandler interface.
-        @Override public void onNotDetectedFace( … ) { … }
         @Override public void onAnalyzedMeasureEnv( … ) { … }
         @Override public void onDetectedFacialLandmark( … ) { … }
         @Override public void onAnalyzedFacialActionUnit( … ) { … }
-        @Override public void onRecognizedFacialExpression( … ) { … }        
+        @Override public void onRecognizedBasicFacialExpression( … ) { … }
+        @Override public void onRecognizedValenceFacialExpression( … ) { … }   
     });
 ```
 
